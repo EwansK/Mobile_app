@@ -15,6 +15,9 @@ export class RegisterPage {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  
+  
+  errorMessage: string = '';
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -24,6 +27,8 @@ export class RegisterPage {
   ) {}
 
   async onSubmit() {
+    this.errorMessage = ''; // Reiniciar el mensaje de error al enviar el formulario
+
     if (this.password !== this.confirmPassword) {
       const alert = await this.alertCtrl.create({
         header: 'Error',
@@ -59,9 +64,11 @@ export class RegisterPage {
       });
 
     } catch (error) {
+      const errorMessage = (error as { message: string }).message || 'Ocurrió un error. Por favor, inténtalo de nuevo.';
+      this.errorMessage = errorMessage; //
       const errorAlert = await this.alertCtrl.create({
         header: 'Error',
-        message: (error as { message: string }).message || 'Ocurrió un error. Por favor, inténtalo de nuevo.',
+        message: errorMessage,
         buttons: ['OK'],
       });
       await errorAlert.present();

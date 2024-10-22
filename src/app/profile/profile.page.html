@@ -14,28 +14,61 @@
         <ion-avatar>
           <img src="assets/img/user-profile.svg" alt="User profile image" />
         </ion-avatar>
-        
+
         <!-- Profile Form -->
-        <form (ngSubmit)="updateProfile()">
+        <form (ngSubmit)="updateProfile()" #profileForm="ngForm">
+
+          <!--nombre-->
           <ion-item>
             <ion-label position="floating">Nombre</ion-label>
-            <ion-input type="text" [(ngModel)]="name" name="name"></ion-input>
+            <ion-input 
+              type="text" 
+              [(ngModel)]="name" 
+              name="name" 
+              required 
+              minlength="3"
+              [ngModelOptions]="{ updateOn: 'blur' }"
+              #nameInput="ngModel"
+            ></ion-input>
+            <ion-text color="danger" *ngIf="nameInput.invalid && nameInput.touched">
+              El nombre debe tener al menos 3 caracteres.
+            </ion-text>
           </ion-item>
 
+          <!--correo-->
           <ion-item>
             <ion-label position="floating">Correo Electrónico</ion-label>
-            <ion-input type="email" [(ngModel)]="email" name="email" readonly></ion-input>
+            <ion-input 
+              type="email" 
+              [(ngModel)]="email" 
+              name="email" 
+              readonly
+            ></ion-input>
           </ion-item>
 
+          <!--nueva contraseña-->
           <ion-item>
             <ion-label position="floating">Nueva Contraseña</ion-label>
-            <ion-input type="password" [(ngModel)]="password" name="password"></ion-input>
+            <ion-input 
+              type="password" 
+              [(ngModel)]="password" 
+              name="password" 
+              minlength="6"
+              [ngModelOptions]="{ updateOn: 'blur' }"
+              #passwordInput="ngModel"
+            ></ion-input>
+            <ion-text color="danger" *ngIf="passwordInput.invalid && passwordInput.touched">
+              La contraseña debe tener al menos 6 caracteres.
+            </ion-text>
           </ion-item>
 
-          <ion-button expand="block" type="submit" color="primary">Actualizar Información</ion-button>
+          <!--actualizar perfil-->
+          <ion-button expand="block" type="submit" color="primary" [disabled]="profileForm.invalid">
+            Actualizar Información
+          </ion-button>
         </form>
 
-        <!-- Button to record voice message -->
+         <!-- Button to record voice message -->
         <ion-button expand="block" color="secondary" routerLink="/record-voice">
           Grabar un Mensaje de Voz
         </ion-button>

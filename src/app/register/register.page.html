@@ -14,38 +14,55 @@
         <ion-col size="12" size-md="6">
           <ion-avatar>
             <a routerLink="/profile">
-              <img src="assets/img/profile_icon.png" alt="Silhouette of a person's head"  />
+              <img src="assets/img/profile_icon.png" alt="Silhouette of a person's head" />
             </a>
           </ion-avatar>
           
           <!-- Your Form -->
-          <form (ngSubmit)="onSubmit()">
+          <form (ngSubmit)="onSubmit()" #registrationForm="ngForm">
             <ion-item>
               <ion-label position="floating">Nombre</ion-label>
               <ion-input type="text" [(ngModel)]="name" name="name" required></ion-input>
+              <ion-text color="danger" *ngIf="registrationForm.controls['name']?.invalid && registrationForm.controls['name']?.touched">
+                El nombre es obligatorio.
+              </ion-text>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Apellido</ion-label>
               <ion-input type="text" [(ngModel)]="lastName" name="lastName" required></ion-input>
+              <ion-text color="danger" *ngIf="registrationForm.controls['lastName']?.invalid && registrationForm.controls['lastName']?.touched">
+                El apellido es obligatorio.
+              </ion-text>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Correo Electrónico</ion-label>
               <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+              <ion-text color="danger" *ngIf="registrationForm.controls['email']?.invalid && registrationForm.controls['email']?.touched">
+                El correo electrónico es obligatorio y debe ser válido.
+              </ion-text>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Contraseña</ion-label>
               <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+              <ion-text color="danger" *ngIf="registrationForm.controls['password']?.invalid && registrationForm.controls['password']?.touched">
+                La contraseña es obligatoria.
+              </ion-text>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Confirmar Contraseña</ion-label>
               <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
+              <ion-text color="danger" *ngIf="password !== confirmPassword && confirmPassword">
+                Las contraseñas no coinciden.
+              </ion-text>
             </ion-item>
 
-            <ion-button expand="block" type="submit" color="primary">Registrarse</ion-button>
+            <p class="ion-text-center ion-text-danger">{{ errorMessage }}</p>
+
+            <ion-button expand="block" type="submit" color="primary" [disabled]="registrationForm.invalid">Registrarse</ion-button>
 
             <p class="ion-text-center">
               ¿Ya tienes una cuenta? <a routerLink="/login">¡Inicia sesión!</a>

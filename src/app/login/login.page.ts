@@ -11,6 +11,7 @@ import { AlertController } from '@ionic/angular';
 export class LoginPage {
   email: string = '';
   password: string = '';
+  errorMessage: string = ''; // Variable para almacenar mensajes de error
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -19,16 +20,19 @@ export class LoginPage {
   ) {}
 
   async onLogin() {
+    this.errorMessage = ''; // 
+
     try {
       const userCredential = await this.afAuth.signInWithEmailAndPassword(this.email, this.password);
       console.log('Logged in:', userCredential);
 
-      // Redirect to the profile page after successful login
+      // Redirigir a la página de perfil después de un inicio de sesión exitoso
       this.router.navigate(['/profile']);
     } catch (error) {
+      this.errorMessage = (error as { message: string }).message || 'Por favor, verifica tus credenciales de inicio de sesión.';
       const alert = await this.alertCtrl.create({
-        header: 'Login Failed',
-        message: (error as { message: string }).message || 'Please check your login credentials.',
+        header: 'Error de Inicio de Sesión',
+        message: this.errorMessage,
         buttons: ['OK'],
       });
       await alert.present();

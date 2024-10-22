@@ -19,18 +19,24 @@
           </ion-avatar>
           
           <!-- Login Form -->
-          <form (ngSubmit)="onLogin()">
+          <form (ngSubmit)="onLogin()" #loginForm="ngForm">
             <ion-item>
               <ion-label position="floating">Correo Electrónico</ion-label>
               <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+              <ion-text color="danger" *ngIf="loginForm.controls['email']?.invalid && loginForm.controls['email']?.touched">
+                El correo electrónico es obligatorio y debe ser válido.
+              </ion-text>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating">Contraseña</ion-label>
               <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+              <ion-text color="danger" *ngIf="loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched">
+                La contraseña es obligatoria.
+              </ion-text>
             </ion-item>
 
-            <ion-button expand="block" type="submit" color="primary">Iniciar Sesión</ion-button>
+            <ion-button expand="block" type="submit" color="primary" [disabled]="loginForm.invalid">Iniciar Sesión</ion-button>
 
             <p class="ion-text-center">
               ¿No tienes una cuenta? <a routerLink="/register">¡Regístrate!</a>
