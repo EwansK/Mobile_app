@@ -68,11 +68,18 @@
           </ion-button>
         </form>
 
-         <!-- Button to record voice message -->
+        <!-- Button to record voice message -->
         <ion-button expand="block" color="secondary" routerLink="/record-voice">
           Grabar un Mensaje de Voz
         </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Botón rojo para eliminar cuenta -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="danger" (click)="confirmDelete()">
+      <ion-icon name="trash"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

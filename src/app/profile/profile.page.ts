@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth'; 
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +15,13 @@ export class ProfilePage implements OnInit {
   email: string = '';
   password: string = '';
 
-  currentName: string = ''; // Variable to store the current user name
+  currentName: string = ''; 
 
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFireDatabase,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private navCtrl: NavController 
   ) {}
 
   ngOnInit() {
@@ -36,13 +39,13 @@ export class ProfilePage implements OnInit {
       userRef.subscribe((userData: any) => {
         if (userData) {
           this.name = userData.name || '';
-          this.currentName = this.name; // Store the current name for later comparison
+          this.currentName = this.name; 
         }
       });
     }
   }
 
-  // Update the user profile information
+  // Update
   async updateProfile() {
     const user = await this.afAuth.currentUser;
     if (user) {
@@ -90,6 +93,61 @@ export class ProfilePage implements OnInit {
           buttons: ['OK'],
         });
         await alert.present();
+      }
+    }
+  }
+
+  // Confirm deletion of the account
+  async confirmDelete() {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar Eliminación',
+      message: '¿Estás seguro de que deseas eliminar tu cuenta?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.deleteAccount();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  // Delete the user account with error handling and redirection
+  async deleteAccount() {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      try {
+        await user.delete();
+
+        await this.db.object(`/users/${user.uid}`).remove();
+
+        // Mostrar mensaje de confirmación
+        const alert = await this.alertCtrl.create({
+          header: 'Cuenta Eliminada',
+          message: 'Tu cuenta ha sido eliminada exitosamente.',
+          buttons: ['OK'],
+        });
+
+        await alert.present();
+      } catch (error) {
+        // Manejo de error
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: (error as { message: string }).message || 'Ocurrió un error al eliminar la cuenta.',
+          buttons: ['OK'],
+        });
+
+        await alert.present();
+      } finally {
+        // Redirigir al home
+        this.navCtrl.navigateRoot('/home');
       }
     }
   }
