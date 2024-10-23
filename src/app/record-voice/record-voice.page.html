@@ -5,11 +5,16 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-grid>
-    <ion-row class="ion-justify-content-center ion-align-items-center" style="height: 100%;">
-      <ion-col size="12" size-md="6" class="ion-text-center">
-        <ion-button expand="block" color="primary" (click)="recordVoice()">Record Voice Message</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="center-button-container">
+    <ion-button class="round-button" (click)="recordVoice()">
+      <ion-icon name="mic-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <!-- Button to navigate to the transcriptions page -->
+  <div class="transcriptions-button-container">
+    <ion-button expand="block" color="secondary" routerLink="/transcriptions">
+      View Transcriptions
+    </ion-button>
+  </div>
 </ion-content>

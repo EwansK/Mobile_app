@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Transcriptions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-list>
+    <!-- List each transcription, clicking opens the modal -->
+    <ion-item *ngFor="let transcription of transcriptions" (click)="openModal(transcription)">
+      <ion-label>{{ transcription.fileName || 'Untitled' }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,16 @@
+.center-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  // Take up the entire height of the screen
+  }
+  
+  .round-button {
+    --border-radius: 50%;    // Makes the button round
+    width: 25vw;             // 25% of the viewport width
+    height: 25vw;            // Maintain equal width and height for a perfect circle
+    font-size: 2rem;         // Adjust the size of the icon inside
+    --background: #3880ff;   // Optional: change the button color
+    --color: white;          // Optional: change the icon color
+  }
+  
