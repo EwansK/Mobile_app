@@ -1,14 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Transcriptions</ion-title>
+    <ion-title>Transcripciones</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
   <ion-list>
-    <!-- List each transcription, clicking opens the modal -->
-    <ion-item *ngFor="let transcription of transcriptions" (click)="openModal(transcription)">
-      <ion-label>{{ transcription.fileName || 'Untitled' }}</ion-label>
+    <!-- Display the list of transcriptions -->
+    <ion-item *ngFor="let transcription of transcriptions; let i = index">
+      <ion-label>
+        <h2>{{ transcription.fileName }}</h2>
+        <p>{{ transcription.transcription }}</p>
+      </ion-label>
+      <!-- Add delete button for each transcription -->
+      <ion-button slot="end" color="danger" (click)="confirmDeleteTranscription(i, transcription.fileName)">
+        Eliminar
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
