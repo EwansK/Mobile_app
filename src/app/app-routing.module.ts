@@ -9,6 +9,8 @@ const routes: Routes = [
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
   { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule), canActivate: [AuthGuard] },
   { path: 'record-voice', loadChildren: () => import('./record-voice/record-voice.module').then(m => m.RecordVoicePageModule), canActivate: [AuthGuard] },
+  { path: 'transcriptions', loadChildren: () => import('./transcriptions/transcriptions.module').then( m => m.TranscriptionsPageModule) },
+  { path: 'transcription-modal', loadChildren: () => import('./transcription-modal/transcription-modal.module').then( m => m.TranscriptionModalPageModule) },
 ];
 
 
