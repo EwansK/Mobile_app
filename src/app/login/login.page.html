@@ -22,13 +22,17 @@
           <form (ngSubmit)="onLogin()">
             <ion-item>
               <ion-label position="floating">Correo Electrónico</ion-label>
-              <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
+              <ion-input type="email" [(ngModel)]="email" name="email" #emailInput="ngModel" required></ion-input>
             </ion-item>
+            <p *ngIf="emailInput.errors?.['required']">Correo es requerido</p>
+            <p *ngIf="emailInput.errors?.['email']">Correo no es válido</p>
 
             <ion-item>
               <ion-label position="floating">Contraseña</ion-label>
-              <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+              <ion-input type="password" [(ngModel)]="password" name="password" #passwordInput="ngModel" required minlength="6"></ion-input>
             </ion-item>
+            <p *ngIf="passwordInput.errors?.['required']">Contraseña es requerida</p>
+            <p *ngIf="passwordInput.errors?.['minlength']">Contraseña debe tener al menos 6 caracteres</p>
 
             <ion-button expand="block" type="submit" color="primary">Iniciar Sesión</ion-button>
 

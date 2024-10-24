@@ -23,11 +23,33 @@ export class RegisterPage {
     private router: Router
   ) {}
 
-  async onSubmit() {
+  // Validaciones de los campos
+  validateFields(): string | null {
+    if (!this.name) {
+      return 'El campo "Nombre" es obligatorio.';
+    }
+    if (!this.lastName) {
+      return 'El campo "Apellido" es obligatorio.';
+    }
+    if (!this.email) {
+      return 'El campo "Correo Electrónico" es obligatorio.';
+    }
+    if (!this.password) {
+      return 'El campo "Contraseña" es obligatorio.';
+    }
     if (this.password !== this.confirmPassword) {
+      return 'Las contraseñas no coinciden.';
+    }
+    return null;  // No hay errores
+  }
+
+  async onSubmit() {
+    // Validar los campos
+    const validationError = this.validateFields();
+    if (validationError) {
       const alert = await this.alertCtrl.create({
-        header: 'Error',
-        message: 'Las contraseñas no coinciden. Por favor, inténtalo de nuevo.',
+        header: 'Error de validación',
+        message: validationError,
         buttons: ['OK'],
       });
       await alert.present();

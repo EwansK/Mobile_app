@@ -19,16 +19,27 @@ export class LoginPage {
   ) {}
 
   async onLogin() {
+    // Validar campos vacíos
+    if (!this.email || !this.password) {
+      const alert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'Por favor, completa todos los campos.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+
     try {
       const userCredential = await this.afAuth.signInWithEmailAndPassword(this.email, this.password);
       console.log('Logged in:', userCredential);
 
-      // Redirect to the profile page after successful login
+      // Redirigir a la página de perfil después del inicio de sesión exitoso
       this.router.navigate(['/profile']);
     } catch (error) {
       const alert = await this.alertCtrl.create({
-        header: 'Login Failed',
-        message: (error as { message: string }).message || 'Please check your login credentials.',
+        header: 'Inicio de Sesión Fallido',
+        message: (error as { message: string }).message || 'Por favor, verifica tus credenciales de inicio de sesión.',
         buttons: ['OK'],
       });
       await alert.present();
