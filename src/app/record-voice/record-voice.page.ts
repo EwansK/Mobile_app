@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Platform } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';  // Add HttpClient for making HTTP requests
 import { finalize } from 'rxjs/operators';
 
 // Declare Cordova plugins
@@ -19,7 +20,8 @@ export class RecordVoicePage {
     private afAuth: AngularFireAuth,
     private afStorage: AngularFireStorage,
     private db: AngularFireDatabase,
-    private platform: Platform
+    private platform: Platform,
+    private http: HttpClient  // Inject HttpClient for making requests
   ) {}
 
   async recordVoice() {
@@ -69,9 +71,13 @@ export class RecordVoicePage {
               uploadTask.snapshotChanges()
                 .pipe(finalize(async () => {
                   const downloadURL = await fileRef.getDownloadURL().toPromise();
+                  
                   // Save the download URL in Firebase Realtime Database
                   this.db.list(`/users/${user.uid}/audio`).push({ fileName, downloadURL });
-                  console.log('Audio uploaded successfully:', downloadURL);
+                  console.log('Audio uploaded successfully:', downloadURL);  // Log the GCS URI
+
+                  // Call Firebase Cloud Function to transcribe the audio
+                  this.transcribeAudio(downloadURL);
                 }))
                 .subscribe();
             } else {
@@ -85,6 +91,17 @@ export class RecordVoicePage {
       });
     } catch (error) {
       console.error('Error uploading audio:', error);
+    }
+  }
+
+  // Call Firebase Function to transcribe audio using Google Cloud Speech-to-Text API
+  async transcribeAudio(gcsUri: string) {
+    try {
+      console.log('Sending GCS URI for transcription:', gcsUri);  // Log the GCS URI being sent
+      const response = await this.http.post('https://us-central1-mobile-app-457c5.cloudfunctions.net/transcribeAudio', { gcsUri }).toPromise();
+      console.log('Transcription result:', response);
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
     }
   }
 }
